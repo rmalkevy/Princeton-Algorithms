@@ -235,8 +235,7 @@ public class KdTree {
     nearestPoint = rootKdTree.p;
     smallestDistance = nearestPoint.distanceSquaredTo(p);
 
-    searchNearest(rootKdTree.lb, p);
-    searchNearest(rootKdTree.rt, p);
+    searchNearest(rootKdTree, p);
     return nearestPoint;
   }
 
@@ -254,8 +253,13 @@ public class KdTree {
       smallestDistance = distance;
     }
 
-    searchNearest(node.lb, queryPoint);
-    searchNearest(node.rt, queryPoint);
+    if (node.lb.p != null && node.lb.rect.contains(queryPoint)) {
+      searchNearest(node.lb, queryPoint);
+      searchNearest(node.rt, queryPoint);
+    } else {
+      searchNearest(node.rt, queryPoint);
+      searchNearest(node.lb, queryPoint);
+    }
   }
 
   // unit testing of the methods (optional)
